@@ -18,10 +18,20 @@ class Sprite
     @y = @window.height/2 - @height/2
     @frame = 0
     @animationMode = "idle"
+    @rotation = 0
   end
 
   def loadAnimation name, image
     @animations[name] = Gosu::Image.load_tiles @window, "assets/sprites/" + image, @width, @height, true
+  end
+
+  def move x, y
+    @y += y
+    @x += x
+  end
+
+  def turn radious
+    @rotation += radious
   end
 
   def setAnimation mode

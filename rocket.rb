@@ -13,6 +13,8 @@ class Rocket < Sprite
     self.loadAnimation "thrustLeft", "zoeRocket/thrustLeft.png"
     self.loadAnimation "thrustRight", "zoeRocket/thrustRight.png"
     @thrustTimer = 0
+    @speed = 5
+    @rotSpeed = 5
     @pressBttns = {
       :thrust => false,
       :turnLeft => false,
@@ -21,14 +23,31 @@ class Rocket < Sprite
   end
 
   def pressBttn bttn, pressed
+
     if pressed
       @pressBttns[bttn] = true
     else
       @pressBttns[bttn] = false
     end
+
+    if @pressBttns[:thrust]
+      if @pressBttns[:turnLeft]
+        self.setAnimation "thrustLeft"
+      elsif @pressBttns[:turnRight]
+        self.setAnimation "thrustRight"
+      else
+        self.setAnimation "thrust"
+      end
+    else
+      if @pressBttns[:turnLeft]
+        self.setAnimation "puffLeft"
+      elsif @pressBttns[:turnRight]
+        self.setAnimation "puffRight"
+      else
+        self.setAnimation "idle"
+      end
+    end
   end
-
-
 
   def button_up id
     self.pressBttn :turnRight, false if id == Gosu::KbRight
@@ -42,43 +61,25 @@ class Rocket < Sprite
     self.pressBttn :thrust, true if id == Gosu::KbUp
   end
 
-  def update
-
-    case
-    when @pressBttns[:thrust]
-      if @thrustTimer < 15
-        self.setAnimation "thrustSmall"
-        @thrustTimer += 1
-      else
-        if @pressBttns[:turnLeft]
-          self.setAnimation "thrustLeft"
-        elsif @pressBttns[:turnRight]
-          self.setAnimation "thrustRight"
-        else
-          self.setAnimation "thrust"
-        end
-      end
-    else
-      if @thrustTimer > 1
-        self.setAnimation "thrustSmall"
-        @thrustTimer += -1
-      else
-        if @pressBttns[:turnLeft]
-          self.setAnimation "puffLeft"
-        elsif @pressBttns[:turnRight]
-          self.setAnimation "puffRight"
-        else
-          self.setAnimation "idle"
-        end
-      end
-
+  def drive hyp
+    if @pressBttns[:thrust]
+      rot = @rotation * Math::PI / 180
+      opp = hyp * Math.sin(rot)
+      adj = hyp * Math.cos(rot)
+      self.move opp, -adj
     end
+  end
+
+  def update
+    self.drive @speed if @pressBttns[:thrust]
+    self.turn -@rotSpeed if @pressBttns[:turnLeft]
+    self.turn @rotSpeed if @pressBttns[:turnRight]
     @frame += 1
   end
 
   def draw
     f = @frame % @animations[@animationMode].size
     image = @animations[@animationMode][f]
-    image.draw @x, @y, 1
+    image.draw_rot @x, @y, 1, @rotation
   end
 end
