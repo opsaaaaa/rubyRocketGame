@@ -8,7 +8,8 @@ class Sprite
   def initialize window
     @window = window
     @width = @height = 120
-    @animation = Hash.new
+    @animations = Hash.new
+    @mode = "idle"
     # @mode["idle"] = Gosu::Image.load_tiles @window, "zoeRocketIdle.png", @width, @height, true
     # @mode["pufR"] = Gosu::Image.load_tiles @window, "zoeRocketPufL.png", @width, @height, true
     # @mode["pufL"] = Gosu::Image.load_tiles @window, "zoeRocketPufR.png", @width, @height, true
@@ -20,7 +21,7 @@ class Sprite
   end
 
   def loadAnimation name, image
-    @animation[name] = Gosu::Image.load_tiles @window, "assets/sprites/" + image, @width, @height, true
+    @animations[name] = Gosu::Image.load_tiles @window, "assets/sprites/" + image, @width, @height, true
   end
 
   def setAnimation mode

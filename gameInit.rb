@@ -12,10 +12,13 @@ class SpriteGame < Gosu::Window
     @rocket = Rocket.new self
   end
 
+  def button_up id
+    @rocket.button_up id
+  end
+
   def button_down id
     close if id == Gosu::KbEscape
-    @rocket.setAnimation "pufL" if id == Gosu::KbLeft
-    @rocket.setAnimation "pufR" if id == Gosu::KbRight
+    @rocket.button_down id
   end
 
   def update
