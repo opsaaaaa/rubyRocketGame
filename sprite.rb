@@ -38,6 +38,8 @@ class Sprite
     @animationMode = mode
   end
 
+  def gravity force = 3
+  end
 end
 
 # @rocketMode = Sprite.new ["idle" => "zoeRocketIdle.png"]

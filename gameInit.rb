@@ -2,6 +2,7 @@
 require "rubygems"
 require "gosu"
 require "./sprite"
+require "./spriteTopDown"
 require "./rocket"
 
 class SpriteGame < Gosu::Window

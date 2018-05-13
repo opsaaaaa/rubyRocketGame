@@ -1,8 +1,6 @@
 
-class Bird < Sprite
-end
 
-class Rocket < Sprite
+class Rocket < SpriteTopDown
   def initialize window
     super
     self.loadAnimation "idle", "zoeRocket/idle.png"
@@ -61,15 +59,6 @@ class Rocket < Sprite
     self.pressBttn :thrust, true if id == Gosu::KbUp
   end
 
-  def drive hyp
-    if @pressBttns[:thrust]
-      rot = @rotation * Math::PI / 180
-      opp = hyp * Math.sin(rot)
-      adj = hyp * Math.cos(rot)
-      self.move opp, -adj
-    end
-  end
-
   def update
     self.drive @speed if @pressBttns[:thrust]
     self.turn -@rotSpeed if @pressBttns[:turnLeft]
@@ -77,9 +66,4 @@ class Rocket < Sprite
     @frame += 1
   end
 
-  def draw
-    f = @frame % @animations[@animationMode].size
-    image = @animations[@animationMode][f]
-    image.draw_rot @x, @y, 1, @rotation
-  end
 end
