@@ -1,15 +1,12 @@
-class Sprite
 
-  def initialize window
-  end
-
+def drive hyp, deg
+  rad = deg * Math::PI / 180
+  opp = hyp * Math.sin(rad)
+  adj = hyp * Math.cos(rad)
+  return opp, adj
 end
 
-class Bird < Sprite
-end
 
-class Rocket < Sprite
-  def initialize
+a = drive 3, 90
 
-  end
-end
+puts a[1]

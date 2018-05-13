@@ -11,12 +11,17 @@ class Rocket < SpriteTopDown
     self.loadAnimation "thrustLeft", "zoeRocket/thrustLeft.png"
     self.loadAnimation "thrustRight", "zoeRocket/thrustRight.png"
     @thrustTimer = 0
-    @speed = 5
-    @rotSpeed = 5
+    @speed = 0.01
+    @rotSpeed = 0.01
     @pressBttns = {
       :thrust => false,
       :turnLeft => false,
       :turnRight => false
+    }
+    @velocity = {
+      :x => 0,
+      :y => 0,
+      :rot => 0
     }
   end
 
@@ -59,10 +64,31 @@ class Rocket < SpriteTopDown
     self.pressBttn :thrust, true if id == Gosu::KbUp
   end
 
+  def motion
+    # self.drive
+    self.move @velocity[:x], @velocity[:y]
+    self.turn @velocity[:rot]
+  end
+
+
+  def addVelocity key, value
+    @velocity[key] += value
+  end
+
+  def drive hyp, deg
+    rad = deg * Math::PI / 180
+    opp = hyp * Math.sin(rad)
+    adj = hyp * Math.cos(rad)
+    return {:y => adj, :x => opp}
+  end
+
   def update
-    self.drive @speed if @pressBttns[:thrust]
-    self.turn -@rotSpeed if @pressBttns[:turnLeft]
-    self.turn @rotSpeed if @pressBttns[:turnRight]
+    m = self.drive @speed, @rotation
+    self.motion
+    self.addVelocity :x, m[:x] if @pressBttns[:thrust]
+    self.addVelocity :y, -m[:y] if @pressBttns[:thrust]
+    self.addVelocity :rot, -@rotSpeed if @pressBttns[:turnLeft]
+    self.addVelocity :rot, @rotSpeed if @pressBttns[:turnRight]
     @frame += 1
   end
 

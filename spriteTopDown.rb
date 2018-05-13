@@ -6,12 +6,12 @@ class SpriteTopDown < Sprite
     super
   end
 
-  def drive hyp
-    rot = @rotation * Math::PI / 180
-    opp = hyp * Math.sin(rot)
-    adj = hyp * Math.cos(rot)
-    self.move opp, -adj
-  end
+  # def drive hyp
+  #   rot = @rotation * Math::PI / 180
+  #   opp = hyp * Math.sin(rot)
+  #   adj = hyp * Math.cos(rot)
+  #   self.move opp, -adj
+  # end
   
   def draw
     f = @frame % @animations[@animationMode].size
